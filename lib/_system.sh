@@ -261,7 +261,7 @@ system_set_timezone() {
   sleep 2
 
   sudo su - root <<EOF
-  timedatectl set-timezone America/Sao_Paulo
+  timedatectl set-timezone America/Guayaquil
 EOF
 
   sleep 2
