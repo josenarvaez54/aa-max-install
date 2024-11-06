@@ -35,13 +35,11 @@ system_git_clone() {
   printf "${WHITE} 💻 Fazendo download do código AutoAtende...${GRAY_LIGHT}"
   printf "\n\n"
 
-
   sleep 2
 
 sudo su - deploy <<EOF
   git clone -b main https://github.com/josenarvaez54/AA-150-demo /home/deploy/${instancia_add}
 EOF
-
 
   sleep 2
 }
@@ -111,7 +109,6 @@ EOF
   printf "${WHITE} 💻 Remoção da Instancia/Empresa ${empresa_delete} realizado com sucesso ...${GRAY_LIGHT}"
   printf "\n\n"
 
-
   sleep 2
 
 }
@@ -130,10 +127,11 @@ system_node_install() {
 
   sudo su - root <<EOF
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get updated
 sudo apt-get install -y nodejs=20.17.0-1nodesource1
 sleep 2
 
-sudo npm install -g npm@latest
+sudo npm install -g npm@10.8.0
 sleep 2
 
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
@@ -226,11 +224,9 @@ system_docker_install() {
   apt install -y apt-transport-https \
                  ca-certificates curl \
                  software-properties-common
-
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
   
-  add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
-
+  add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
   apt install -y docker-ce
 EOF
 
@@ -244,18 +240,20 @@ EOF
 #######################################
 system_pm2_install() {
   print_banner
-  printf "${WHITE} 💻 Instalando pm2...${GRAY_LIGHT}"
-  printf "\n\n"
-
-  sleep 2
+  printf "${WHITE} 💻 Instalando o pm2...${GRAY_LIGHT}\n\n"
 
   sudo su - root <<EOF
   npm install -g pm2@latest
-
 EOF
 
   sleep 2
+
+  printf "${WHITE} ✔️ pm2 instalado com sucesso!${GRAY_LIGHT}\n"
+
+  sleep 2
+
 }
+
 
 #######################################
 # set timezone
@@ -333,8 +331,8 @@ system_nginx_install() {
 
   sudo su - root <<EOF
   apt install -y nginx
-  rm -f /etc/nginx/sites-enabled/default
-  rm -f /etc/nginx/sites-available/default
+  rm /etc/nginx/sites-enabled/default
+  rm /etc/nginx/sites-available/default
 EOF
 
   sleep 2
@@ -372,11 +370,9 @@ system_nginx_conf() {
   sleep 2
 
 sudo su - root << EOF
-
 cat > /etc/nginx/conf.d/deploy.conf << 'END'
 client_max_body_size 100M;
 END
-
 EOF
 
   sleep 2
